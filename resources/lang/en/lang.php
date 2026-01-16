@@ -264,6 +264,7 @@ return [
     //---------------------------------------FFFF---------------------------------------
     'faq_category_name' => 'Name',
     'fats' => "Fats",
+    'food' => 'Food',
     'first_name' => "First Name",
     'first_name_help' => "Insert First Name",
     'fix_commission' => "Fix Commission",
@@ -295,6 +296,7 @@ return [
     'item_title' => "Title",
     //---------------------------------------GGGG---------------------------------------
     'grams' => "Grams",
+    'grocery' => 'Grocery',
     //---------------------------------------HHHH---------------------------------------
     //---------------------------------------IIII---------------------------------------
     'ingredients' => "Ingredients",

@@ -45,6 +45,17 @@
                                             </div>
                                         </div>
                                         <div class="form-group row width-100">
+                                            <label class="col-3 control-label">{{trans('lang.type')}}</label>
+                                            <div class="col-7">
+                                                <select class="form-control cat-type">
+                                                    <option value="">{{trans('lang.select_type')}}</option>
+                                                    <option value="grocery">{{trans('lang.grocery')}}</option>
+                                                    <option value="food">{{trans('lang.food')}}</option>
+                                                </select>
+                                                <div class="form-text text-muted">{{ trans("lang.select_type") }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row width-100">
                                             <label class="col-3 control-label ">{{trans('lang.category_description')}}</label>
                                             <div class="col-7">
                             <textarea rows="7" class="category_description form-control"
@@ -117,6 +128,7 @@
         $(".save-setting-btn").click(async function () {
             var title = $(".cat-name").val();
             var description = $(".category_description").val();
+            var type = $(".cat-type").val();
             var item_publish = $("#item_publish").is(":checked");
             var show_in_homepage = $("#show_in_homepage").is(":checked");
             var review_attributes = [];
@@ -147,6 +159,7 @@
                     'id': id_category,
                     'title': title,
                     'description': description,
+                    'type': type,
                     'photo': IMG,
                     'review_attributes': review_attributes,
                     'publish': item_publish,

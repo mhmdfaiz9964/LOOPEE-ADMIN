@@ -58,6 +58,7 @@
                                             <a id="deleteAll" class="do_not_delete" href="javascript:void(0)"><i class="mdi mdi-delete"></i> {{trans('lang.all')}}</a></label></th>
                                     <?php } ?>
                                     <th>{{trans('lang.faq_category_name')}}</th>
+                                    <th>{{trans('lang.type')}}</th>
                                     <th>{{trans('lang.item_plural')}}</th>
                                     <th> {{trans('lang.item_publish')}}</th>
                                     <th>{{trans('lang.actions')}}</th>
@@ -102,7 +103,7 @@
                 const searchValue = data.search.value.toLowerCase();
                 const orderColumnIndex = data.order[0].column;
                 const orderDirection = data.order[0].dir;
-                const orderableColumns = (checkDeletePermission) ? ['','title', 'totalProducts','',''] : ['title', 'totalProducts','','']; // Ensure this matches the actual column names
+                const orderableColumns = (checkDeletePermission) ? ['','title','type', 'totalProducts','',''] : ['title','type', 'totalProducts','','']; // Ensure this matches the actual column names
                 const orderByField = orderableColumns[orderColumnIndex]; // Adjust the index to match your table
                 if (searchValue.length >= 3 || searchValue.length === 0) {
                     $('#data-table_processing').show();
@@ -134,7 +135,8 @@
                         if (searchValue) {
                             if (
                                 (childData.title && childData.title.toString().toLowerCase().includes(searchValue)) ||
-                                (childData.totalProducts && childData.totalProducts.toString().includes(searchValue))
+                                (childData.totalProducts && childData.totalProducts.toString().includes(searchValue)) ||
+                                (childData.type && childData.type.toString().toLowerCase().includes(searchValue))
                             ) {
                                 filteredRecords.push(childData);
                             }
@@ -167,6 +169,7 @@
                         records.push([
                             checkDeletePermission ? '<td class="delete-all"><input type="checkbox" id="is_open_' + childData.id + '" class="is_open" dataId="' + childData.id + '"><label class="col-3 control-label"\n' + 'for="is_open_' + childData.id + '" ></label></td>' : '',
                             ImageHtml+'<a href="' + route1 + '">' + childData.title + '</a>',
+                            childData.type ? childData.type.charAt(0).toUpperCase() + childData.type.slice(1) : '',
                             '<a href="' + url + '">'+childData.totalProducts+'</a>',
                             childData.publish ? '<label class="switch"><input type="checkbox" checked id="' + childData.id + '" name="isSwitch"><span class="slider round"></span></label>' : '<label class="switch"><input type="checkbox" id="' + childData.id + '" name="isSwitch"><span class="slider round"></span></label>',
                             '<span class="action-btn"><a href="' + route1 + '"><i class="mdi mdi-lead-pencil" title="Edit"></i></a><?php if(in_array('category.delete', json_decode(@session('user_permissions'),true))){ ?> <a id="' + childData.id + '" name="category-delete" class="delete-btn" href="javascript:void(0)"><i class="mdi mdi-delete"></i></a><?php } ?></span>'                           
@@ -192,7 +195,7 @@
             },           
             order: (checkDeletePermission) ? [1, 'asc'] : [0,'asc'],
             columnDefs: [
-                { orderable: false, targets: (checkDeletePermission) ? [0,3,4] : [2, 3] },
+                { orderable: false, targets: (checkDeletePermission) ? [0,4,5] : [3, 4] },
             ],
             "language": {
                 "zeroRecords": "{{trans("lang.no_record_found")}}",
