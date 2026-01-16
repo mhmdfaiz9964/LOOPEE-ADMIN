@@ -20,6 +20,9 @@
                             {{trans('lang.dashboard_business_analytics')}}</h4>
 
                     </div>
+                    <div class="col-sm-6 text-right">
+                        <button id="auto_assign_types" class="btn btn-warning btn-sm">Auto Assign Types (One Time)</button>
+                    </div>
 
                 </div>
 
@@ -2098,6 +2101,71 @@
         })
 
     }
+
+    $('#auto_assign_types').click(async function() {
+        if (!confirm('Are you sure you want to randomly assign types (Grocery/Food) to all Stores and Categories that miss this field? This process cannot be undone.')) {
+            return;
+        }
+
+        $(this).prop('disabled', true).text('Processing...');
+        var db = firebase.firestore();
+        var types = ['grocery', 'food'];
+
+        try {
+            // Update Vendors (Stores)
+            var vendorBatch = db.batch();
+            var vendorCount = 0;
+            var vendorsSnapshot = await db.collection('vendors').get();
+            
+            vendorsSnapshot.forEach((doc) => {
+                var randomType = types[Math.floor(Math.random() * types.length)];
+                var vendorRef = db.collection('vendors').doc(doc.id);
+                // Update regardless to ensure all have it
+                vendorBatch.update(vendorRef, { type: randomType });
+                vendorCount++;
+                
+                if (vendorCount >= 450) {
+                     vendorBatch.commit();
+                     vendorBatch = db.batch(); 
+                     vendorCount = 0;
+                }
+            });
+            
+            if (vendorCount > 0) {
+                await vendorBatch.commit();
+            }
+
+            // Update Categories (vendor_categories)
+            var catBatch = db.batch();
+            var catCount = 0;
+            var catSnapshot = await db.collection('vendor_categories').get();
+
+            catSnapshot.forEach((doc) => {
+                var randomType = types[Math.floor(Math.random() * types.length)];
+                var catRef = db.collection('vendor_categories').doc(doc.id);
+                catBatch.update(catRef, { type: randomType });
+                catCount++;
+
+                if (catCount >= 450) {
+                     catBatch.commit();
+                     catBatch = db.batch();
+                     catCount = 0;
+                }
+            });
+
+            if (catCount > 0) {
+                await catBatch.commit();
+            }
+            
+            alert('Success! Processed stores and categories.');
+
+        } catch (error) {
+            console.error(error);
+            alert('Error: ' + error.message);
+        } finally {
+            $('#auto_assign_types').prop('disabled', false).text('Auto Assign Types (One Time)');
+        }
+    });
 
 </script>
 
