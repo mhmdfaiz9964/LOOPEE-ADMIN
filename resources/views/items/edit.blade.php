@@ -152,6 +152,15 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="form-group row width-50">
+                                        <label class="col-3 control-label">{{ trans('lang.type') }}</label>
+                                        <div class="col-7">
+                                            <select id='item_type' class="form-control">
+                                                <option value="food">{{ trans('lang.food') }}</option>
+                                                <option value="grocery">{{ trans('lang.grocery') }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="form-group row width-100" id="attributes_div">
                                         <label class="col-3 control-label">{{ trans('lang.item_attribute_id') }}</label>
                                         <div class="col-7">
@@ -596,6 +605,9 @@
                     $(".food_fats").val(product.fats);
                 }
                 $("#item_description").val(product.description);
+                if (product.hasOwnProperty('type')) {
+                    $("#item_type").val(product.type);
+                }
                 if (product.publish) {
                     $(".food_publish").prop('checked', true);
                 }
@@ -802,7 +814,7 @@
                             'product_specification': product_specification,
                             'item_attribute': item_attribute,
                             'photos': IMG,
-                            'type': productType
+                            'type': $("#item_type").val()
                         }).then(function(result) {
                             <?php if(isset($_GET['eid']) && $_GET['eid'] != ''){?>
                             window.location.href = "{{ route('stores.items', $_GET['eid']) }}";
@@ -1046,6 +1058,17 @@
                 'width': '100%'
             });
             var selected_vendor = this.value;
+
+            // Auto-update Type based on vendor
+            var productType = await getProductType(restaurant, $("#item_category").val());
+            $("#item_type").val(productType);
+        });
+
+        $("#item_category").change(async function() {
+            var categoryId = $(this).val();
+            var vendorId = $("#item_vendor").val();
+            var productType = await getProductType(vendorId, categoryId);
+            $("#item_type").val(productType);
         });
 
         function change_categories(selected_vendor) {

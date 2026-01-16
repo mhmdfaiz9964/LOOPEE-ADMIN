@@ -219,7 +219,7 @@
                                                 <?php } ?>
 
                                                 <th>{{ trans('lang.item_category_id') }}</th>
-
+                                                <th>{{ trans('lang.type') }}</th>
                                                 <th>{{ trans('lang.item_publish') }}</th>
 
                                                 <th>{{ trans('lang.actions') }}</th>
