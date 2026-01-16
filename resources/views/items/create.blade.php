@@ -700,6 +700,9 @@
                                 if (IMG.length > 0) {
                                     photo = IMG[0];
                                 }
+                                // Auto-assign type based on store or category
+                                var productType = await getProductType(restaurant, category);
+                                
                                 var objects = {
                                     'name': name,
                                     'price': price.toString(),
@@ -723,6 +726,7 @@
                                     'id': id,
                                     'item_attribute': item_attribute,
                                     'photos': IMG,
+                                    'type': productType,
                                     'createdAt': firebase.firestore.FieldValue.serverTimestamp()
                                 };
                                 //end-item attribute
@@ -805,6 +809,34 @@
                 }
             })
             return data;
+        }
+        
+        async function getProductType(vendorId, categoryId) {
+            var type = 'food'; // default
+            
+            // First, try to get type from vendor/store
+            await database.collection('vendors').doc(vendorId).get().then(async function(snapshot) {
+                if (snapshot.exists) {
+                    var vendorData = snapshot.data();
+                    if (vendorData.type) {
+                        type = vendorData.type;
+                    }
+                }
+            });
+            
+            // If vendor doesn't have type, get from category
+            if (!type || type === 'food') {
+                await database.collection('vendor_categories').doc(categoryId).get().then(async function(snapshot) {
+                    if (snapshot.exists) {
+                        var categoryData = snapshot.data();
+                        if (categoryData.type) {
+                            type = categoryData.type;
+                        }
+                    }
+                });
+            }
+            
+            return type;
         }
         var storageRef = firebase.storage().ref('images');
 

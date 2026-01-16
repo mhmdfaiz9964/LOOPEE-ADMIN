@@ -22,6 +22,14 @@ We have successfully implemented a system to distinguish both **Stores** and **C
 1.  **Data Structure**: Both `vendors` and `vendor_categories` collections in Firestore now have a `type` string field ('grocery' or 'food').
 2.  **Visual Indicators**: The Admin Panel uses this field to render specific badges, helping admins quickly scan lists.
 3.  **App Filtering**: The user-facing app can query `where('type', '==', 'food')` or `where('type', '==', 'grocery')` to show relevant content in the appropriate tabs.
+
+### C. Product Type Assignment (NEW)
+- **Automatic Assignment**: When creating or editing a product, the system now automatically assigns a `type` field based on:
+    1. **Store Type** (primary): If the product's store has a type, the product inherits it.
+    2. **Category Type** (fallback): If the store doesn't have a type, the product inherits the category's type.
+- **Backfill Utility**: A new "Auto Assign Product Types" button on the Dashboard allows you to backfill all existing products with types based on their current store/category associations.
+- **Collection**: The `vendor_products` collection now includes a `type` field for each product.
+- **Use Case**: This enables the mobile app to filter products by type (e.g., show only grocery items in the mart section).
 ---
 
 ## 2. API KEYS IMPLEMENTATION

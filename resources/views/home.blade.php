@@ -21,7 +21,8 @@
 
                     </div>
                     <div class="col-sm-6 text-right">
-                        <button id="auto_assign_types" class="btn btn-warning btn-sm">Auto Assign Types (One Time)</button>
+                        <button id="auto_assign_types" class="btn btn-warning btn-sm mr-2">Auto Assign Store/Category Types</button>
+                        <button id="auto_assign_product_types" class="btn btn-info btn-sm">Auto Assign Product Types</button>
                     </div>
 
                 </div>
@@ -2163,7 +2164,89 @@
             console.error(error);
             alert('Error: ' + error.message);
         } finally {
-            $('#auto_assign_types').prop('disabled', false).text('Auto Assign Types (One Time)');
+            $('#auto_assign_types').prop('disabled', false).text('Auto Assign Store/Category Types');
+        }
+    });
+
+    $('#auto_assign_product_types').click(async function() {
+        if (!confirm('This will assign types (Grocery/Food) to all Products based on their Store and Category types. This may take a while. Continue?')) {
+            return;
+        }
+
+        $(this).prop('disabled', true).text('Processing Products...');
+        var db = firebase.firestore();
+        var processedCount = 0;
+        var errorCount = 0;
+
+        try {
+            // Get all products
+            var productsSnapshot = await db.collection('vendor_products').get();
+            var totalProducts = productsSnapshot.size;
+            
+            console.log('Total products to process:', totalProducts);
+            
+            // Process in batches
+            var batch = db.batch();
+            var batchCount = 0;
+            
+            for (const doc of productsSnapshot.docs) {
+                var product = doc.data();
+                var productType = 'food'; // default
+                
+                try {
+                    // First, try to get type from vendor/store
+                    if (product.vendorID) {
+                        var vendorSnapshot = await db.collection('vendors').doc(product.vendorID).get();
+                        if (vendorSnapshot.exists) {
+                            var vendorData = vendorSnapshot.data();
+                            if (vendorData.type) {
+                                productType = vendorData.type;
+                            }
+                        }
+                    }
+                    
+                    // If vendor doesn't have type, get from category
+                    if ((!productType || productType === 'food') && product.categoryID) {
+                        var categorySnapshot = await db.collection('vendor_categories').doc(product.categoryID).get();
+                        if (categorySnapshot.exists) {
+                            var categoryData = categorySnapshot.data();
+                            if (categoryData.type) {
+                                productType = categoryData.type;
+                            }
+                        }
+                    }
+                    
+                    // Update product with type
+                    var productRef = db.collection('vendor_products').doc(doc.id);
+                    batch.update(productRef, { type: productType });
+                    batchCount++;
+                    processedCount++;
+                    
+                    // Commit batch every 450 operations (Firestore limit is 500)
+                    if (batchCount >= 450) {
+                        await batch.commit();
+                        batch = db.batch();
+                        batchCount = 0;
+                        $(this).text('Processing... (' + processedCount + '/' + totalProducts + ')');
+                    }
+                } catch (err) {
+                    console.error('Error processing product:', doc.id, err);
+                    errorCount++;
+                }
+            }
+            
+            // Commit remaining batch
+            if (batchCount > 0) {
+                await batch.commit();
+            }
+            
+            alert('Success! Processed ' + processedCount + ' products.' + (errorCount > 0 ? ' Errors: ' + errorCount : ''));
+
+        } catch (error) {
+            console.error(error);
+            alert('Error: ' + error.message);
+        } finally {
+            $('#auto_assign_product_types').prop('disabled', false).text('Auto Assign Product Types');
         }
     });
 
