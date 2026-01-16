@@ -777,7 +777,7 @@
 
                         orderable: false,
 
-                        targets: (restaurantID == '') ? ((checkDeletePermission) ? [0, 5, 6] : [4, 5]) : ((checkDeletePermission) ? [0, 4, 5] : [3, 5])
+                        targets: (restaurantID == '') ? ((checkDeletePermission) ? [0, 5, 6, 7] : [4, 5, 6]) : ((checkDeletePermission) ? [0, 4, 5, 6] : [3, 4, 5])
 
                     },
 
@@ -1002,6 +1002,14 @@
             caregoryroute = caregoryroute.replace(':id', val.categoryID);
 
             html.push('<a href="' + caregoryroute + '">' + val.category + '</a>');
+
+            if (val.type == 'grocery') {
+                html.push('<span class="badge badge-success"><i class="mdi mdi-cart-outline"></i> Grocery</span>');
+            } else if (val.type == 'food') {
+                html.push('<span class="badge badge-warning"><i class="mdi mdi-food"></i> Food</span>');
+            } else {
+                html.push('N/A');
+            }
 
             if (val.publish) {
 

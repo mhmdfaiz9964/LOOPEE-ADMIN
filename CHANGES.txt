@@ -27,6 +27,9 @@ We have successfully implemented a system to distinguish both **Stores** and **C
 - **Automatic Assignment**: When creating or editing a product, the system now automatically assigns a `type` field based on:
     1. **Store Type** (primary): If the product's store has a type, the product inherits it.
     2. **Category Type** (fallback): If the store doesn't have a type, the product inherits the category's type.
+- **UI Visibility**:
+    - **Create/Edit Product**: A "Type" dropdown is now visible. It auto-fills when a store or category is selected but can be changed manually.
+    - **Product List**: Added a "Type" column with visual badges (Grocery/Food) for easy identification.
 - **Backfill Utility**: A new "Auto Assign Product Types" button on the Dashboard allows you to backfill all existing products with types based on their current store/category associations.
 - **Collection**: The `vendor_products` collection now includes a `type` field for each product.
 - **Use Case**: This enables the mobile app to filter products by type (e.g., show only grocery items in the mart section).
