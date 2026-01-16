@@ -169,7 +169,7 @@
                         records.push([
                             checkDeletePermission ? '<td class="delete-all"><input type="checkbox" id="is_open_' + childData.id + '" class="is_open" dataId="' + childData.id + '"><label class="col-3 control-label"\n' + 'for="is_open_' + childData.id + '" ></label></td>' : '',
                             ImageHtml+'<a href="' + route1 + '">' + childData.title + '</a>',
-                            childData.type ? childData.type.charAt(0).toUpperCase() + childData.type.slice(1) : '',
+                            (childData.type == 'grocery' ? '<span class="badge badge-success"><i class="mdi mdi-cart-outline"></i> Grocery</span>' : (childData.type == 'food' ? '<span class="badge badge-warning"><i class="mdi mdi-food"></i> Food</span>' : '')),
                             '<a href="' + url + '">'+childData.totalProducts+'</a>',
                             childData.publish ? '<label class="switch"><input type="checkbox" checked id="' + childData.id + '" name="isSwitch"><span class="slider round"></span></label>' : '<label class="switch"><input type="checkbox" id="' + childData.id + '" name="isSwitch"><span class="slider round"></span></label>',
                             '<span class="action-btn"><a href="' + route1 + '"><i class="mdi mdi-lead-pencil" title="Edit"></i></a><?php if(in_array('category.delete', json_decode(@session('user_permissions'),true))){ ?> <a id="' + childData.id + '" name="category-delete" class="delete-btn" href="javascript:void(0)"><i class="mdi mdi-delete"></i></a><?php } ?></span>'                           

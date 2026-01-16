@@ -1207,8 +1207,10 @@
         }
 
         html.push(ownerInfo);
-        if (val.type) {
-            html.push(val.type);
+        if (val.type == 'grocery') {
+            html.push('<span class="badge badge-success"><i class="mdi mdi-cart-outline"></i> Grocery</span>');
+        } else if (val.type == 'food') {
+            html.push('<span class="badge badge-warning"><i class="mdi mdi-food"></i> Food</span>');
         } else {
             html.push('N/A');
         }
