@@ -145,14 +145,13 @@
             } else {
                 var count_vendor_categories = 0;
                     if (show_in_homepage) {
-                        await database.collection('vendor_categories').where('show_in_homepage', "==", true).get().then(async function (snapshots) {
-                    count_vendor_categories = snapshots.docs.length;
-                    });
+                        // Limit Removed
                     }
-                    if (count_vendor_categories >= 5) {
-                alert("Already 5 categories are active for show in homepage..");
-                return false;
-            } else {
+                    // if (count_vendor_categories >= 5) {
+                    //     alert("Already 5 categories are active for show in homepage..");
+                    //     return false;
+                    // } else {
+                    {
 				jQuery("#data-table_processing").show();
               storeImageData().then(IMG => {
                 database.collection('vendor_categories').doc(id_category).set({

@@ -1,22 +1,27 @@
 
 # RECENT CHANGES & API KEY IMPLEMENTATION GUIDE
 
-## 1. RECENT CHANGES: CATEGORY TYPE (GROCERY / FOOD)
+## 1. RECENT CHANGES: STORE & CATEGORY TYPES (GROCERY / FOOD)
 
-We have successfully added a new feature to distinguish categories by type: **Grocery** or **Food**. This allows for better organization and filtering of categories within the application.
+We have successfully implemented a system to distinguish both **Stores** and **Categories** by type: **Grocery** or **Food**. This allows for clear segregation within the app (e.g., separate flows for ordering food vs. buying groceries).
 
-### Changes Made:
-- **Database**: The `vendor_categories` collection in Firestore now supports a `type` field (values: `grocery` or `food`).
-- **Create Category Page**: Added a dropdown menu to select the specific type when creating a new category.
-- **Edit Category Page**: Added a dropdown menu to view and modify the type of existing categories.
-- **Category List Page**: Added a new "Type" column to the categories table to display the selected type. The search and sort functionality now supports this new column.
-- **Localization**: Added translation keys for "Food" and "Grocery" in the language files for multi-language support.
+### A. Changes in Stores (Vendors)
+- **Create/Edit Store**: Added a "Type" dropdown menu. Admins must select "Grocery" or "Food" when onboarding a vendor.
+- **Default Settings**: New stores now default to **Sri Lanka (+94)** for the phone country code.
+- **Store List UI**: The list view now features **Visual Badges** for easy identification:
+    - **Grocery**: Green Badge with a Shopping Cart icon (<i class="mdi mdi-cart-outline"></i>).
+    - **Food**: Orange Badge with a Food icon (<i class="mdi mdi-food"></i>).
+- **Store Details**: The "View Store" page now explicitly lists the assigned Store Type.
+
+### B. Changes in Categories
+- **Management**: Similar to stores, Categories now require a "Type" selection during creation or editing.
+- **Category List UI**: Updated to use the same **Visual Badges** as the store list for consistency (Green/Cart for Grocery, Orange/Food for Food).
+- **Auto-Assign Utility**: A temporary "Auto Assign Types" button was added to the **Dashboard**. This tool backfills existing stores and categories with random types if they were missing, ensuring the new feature works with legacy data.
 
 ### How It Works:
-1.  **Selection**: When an admin creates or edits a category, they select "Grocery" or "Food" from the new dropdown menu.
-2.  **Storage**: This selection is saved as a string field named `type` in the `vendor_categories` document in your Firebase Cloud Firestore.
-3.  **Usage in App**: The mobile application and website can now read this `type` field to separate categories (e.g., showing only "Food" categories in the food delivery section and "Grocery" categories in the mart section).
-
+1.  **Data Structure**: Both `vendors` and `vendor_categories` collections in Firestore now have a `type` string field ('grocery' or 'food').
+2.  **Visual Indicators**: The Admin Panel uses this field to render specific badges, helping admins quickly scan lists.
+3.  **App Filtering**: The user-facing app can query `where('type', '==', 'food')` or `where('type', '==', 'grocery')` to show relevant content in the appropriate tabs.
 ---
 
 ## 2. API KEYS IMPLEMENTATION
