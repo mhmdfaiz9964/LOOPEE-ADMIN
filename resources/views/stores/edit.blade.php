@@ -159,6 +159,16 @@
                                         </div>
 
                                     </div>
+                                    <div class="form-group row width-50">
+                                        <label class="col-3 control-label">{{ trans('lang.type') }}</label>
+                                        <div class="col-7">
+                                            <select class="form-control" id="restaurant_type">
+                                                <option value="">{{ trans('lang.select_type') }}</option>
+                                                <option value="grocery">{{ trans('lang.grocery') }}</option>
+                                                <option value="food">{{ trans('lang.food') }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
 
                                     <div class="form-group row width-50">
 
@@ -1792,9 +1802,10 @@
                     $(".restaurant_name").val(restaurant.title);
 
                     if (restaurant.filters) {
-
                         $(".restaurant_cuisines").val(restaurant.filters.Cuisine);
-
+                    }
+                    if (restaurant.type) {
+                        $("#restaurant_type").val(restaurant.type);
                     }
 
                     $(".restaurant_address").val(restaurant.location);
@@ -2358,6 +2369,7 @@
                 var restaurantname = $(".restaurant_name").val();
 
                 var cuisines = $("#restaurant_cuisines").val();
+                var type = $("#restaurant_type").val();
                 var categoryTitle = $("#restaurant_cuisines option:selected").map(function() {
                     return $(this).text();
                 }).get();
@@ -2799,7 +2811,10 @@
 
                                         'photos': GalleryIMG,
 
+                                        'photos': GalleryIMG,
+
                                         'categoryID': cuisines,
+                                        'type': type,
 
                                         'countryCode': rescountryCode,
 

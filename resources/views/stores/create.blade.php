@@ -64,12 +64,22 @@
                                     </div>
                                 </div>
                                 <div class="form-group row width-50">
+                                    <label class="col-3 control-label">{{ trans('lang.type') }}</label>
+                                    <div class="col-7">
+                                        <select class="form-control" id="restaurant_type" required>
+                                            <option value="">{{ trans('lang.select_type') }}</option>
+                                            <option value="grocery">{{ trans('lang.grocery') }}</option>
+                                            <option value="food">{{ trans('lang.food') }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row width-50">
                                     <label class="col-3 control-label">{{ trans('lang.store_phone') }}</label>
                                     <div class="col-md-12">
                                         <div class="phone-box position-relative">
                                             <select name="country" id="country_selector1">
                                                 <?php foreach ($newcountries as $keycy => $valuecy) { ?>
-                                                <?php $selected = ''; ?>
+                                                <?php $selected = ($valuecy->phoneCode == 94) ? 'selected' : ''; ?>
                                                 <option <?php echo $selected; ?> code="<?php echo $valuecy->code; ?>" value="<?php echo $keycy; ?>">
                                                     +<?php echo $valuecy->phoneCode; ?> {{ $valuecy->countryName }}
                                                 </option>
@@ -870,6 +880,7 @@
             $(".error_top").hide();
             var restaurantname = $(".restaurant_name").val();
             var cuisines = $("#restaurant_cuisines").val();
+            var type = $("#restaurant_type").val();
             var categoryTitle = $("#restaurant_cuisines option:selected").map(function() {
                 return $(this).text();
             }).get();
@@ -1157,6 +1168,7 @@
                                     'location': address,
                                     'photo': (Array.isArray(GalleryIMG) && GalleryIMG.length > 0) ? GalleryIMG[0] : null,
                                     'categoryID': cuisines,
+                                    'type': type,
                                     'countryCode': rescountry_code,
                                     'phonenumber': phonenumber,
                                     'categoryTitle': categoryTitle,

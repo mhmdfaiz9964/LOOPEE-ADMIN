@@ -190,6 +190,10 @@
                                                     <label class="mb-0 font-wi font-semibold text-dark-2">{{ trans('lang.store_category') }}</label>
                                                     <span class="restaurant_cuisines"></span>
                                                 </li>
+                                                <li class="d-flex align-items-center mb-2">
+                                                    <label class="mb-0 font-wi font-semibold text-dark-2">{{ trans('lang.type') }}</label>
+                                                    <span class="restaurant_type"></span>
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -924,6 +928,11 @@
                     $(".restaurant_latitude").text(restaurant.latitude);
                     $(".restaurant_longitude").text(restaurant.longitude);
                     $(".restaurant_description").text(restaurant.description);
+                    if (restaurant.type) {
+                        $(".restaurant_type").text(restaurant.type);
+                    } else {
+                        $(".restaurant_type").text("N/A");
+                    }
                     restaurantOwnerOnline = restaurant.isActive;
                     photo = restaurant.photo;
                     restaurantOwnerId = restaurant.author;

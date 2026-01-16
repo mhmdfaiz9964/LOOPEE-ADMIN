@@ -265,6 +265,7 @@
                                             <th>{{trans('lang.store_info')}}</th>
 
                                             <th>{{trans('lang.owner_info')}}</th>
+                                            <th>{{trans('lang.type')}}</th>
 
                                             <th>{{trans('lang.date')}}</th>
 
@@ -699,6 +700,10 @@
                     key: 'authorName',
                     header: "{{trans('lang.owner_name')}}"
                 },
+                {
+                    key: 'type',
+                    header: "{{trans('lang.type')}}"
+                },
 
                 {
                     key: 'phonenumber',
@@ -743,7 +748,7 @@
 
                 const orderDirection = data.order[0].dir;
 
-                const orderableColumns = (checkDeletePermission) ? ['', 'title', 'authorName', 'createdAt', '', ''] : ['title', 'authorName', 'createdAt', '', ''];
+                const orderableColumns = (checkDeletePermission) ? ['', 'title', 'authorName', 'type', 'createdAt', '', ''] : ['title', 'authorName', 'type', 'createdAt', '', ''];
 
                 const orderByField = orderableColumns[orderColumnIndex];
 
@@ -833,7 +838,8 @@
 
                                 (childData.email && childData.email.toLowerCase().toString().includes(searchValue)) ||
 
-                                (childData.phoneNumber && childData.phoneNumber.toString().includes(searchValue))
+                                (childData.phoneNumber && childData.phoneNumber.toString().includes(searchValue)) ||
+                                (childData.type && childData.type.toLowerCase().toString().includes(searchValue))
 
                             ) {
 
@@ -1001,7 +1007,7 @@
 
                 {
                     orderable: false,
-                    targets: (checkDeletePermission) ? [0, 4, 5] : [3, 4]
+                    targets: (checkDeletePermission) ? [0, 4, 5, 6] : [3, 4, 5]
                 },
 
             ],
@@ -1201,6 +1207,11 @@
         }
 
         html.push(ownerInfo);
+        if (val.type) {
+            html.push(val.type);
+        } else {
+            html.push('N/A');
+        }
 
         var date = '';
 

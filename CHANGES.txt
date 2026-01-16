@@ -1,0 +1,50 @@
+
+# RECENT CHANGES & API KEY IMPLEMENTATION GUIDE
+
+## 1. RECENT CHANGES: CATEGORY TYPE (GROCERY / FOOD)
+
+We have successfully added a new feature to distinguish categories by type: **Grocery** or **Food**. This allows for better organization and filtering of categories within the application.
+
+### Changes Made:
+- **Database**: The `vendor_categories` collection in Firestore now supports a `type` field (values: `grocery` or `food`).
+- **Create Category Page**: Added a dropdown menu to select the specific type when creating a new category.
+- **Edit Category Page**: Added a dropdown menu to view and modify the type of existing categories.
+- **Category List Page**: Added a new "Type" column to the categories table to display the selected type. The search and sort functionality now supports this new column.
+- **Localization**: Added translation keys for "Food" and "Grocery" in the language files for multi-language support.
+
+### How It Works:
+1.  **Selection**: When an admin creates or edits a category, they select "Grocery" or "Food" from the new dropdown menu.
+2.  **Storage**: This selection is saved as a string field named `type` in the `vendor_categories` document in your Firebase Cloud Firestore.
+3.  **Usage in App**: The mobile application and website can now read this `type` field to separate categories (e.g., showing only "Food" categories in the food delivery section and "Grocery" categories in the mart section).
+
+---
+
+## 2. API KEYS IMPLEMENTATION
+
+The application uses various API keys (Google Maps, Firebase, Payment Gateways) which are managed directly through the Admin Panel's settings. These keys are stored in the Firestore database (`settings` collection) and fetched by the app as needed.
+
+### A. Google Maps API Key
+This key is used for map rendering, location picking, and direction services.
+1.  **Navigate to**: Admin Panel > Settings > Global Settings.
+2.  **Locate Section**: "Google Map API Key" (usually at the bottom or middle of the page).
+3.  **Input**: Enter your Google Maps API Key in the field provided.
+4.  **Save**: Click the "Save" button.
+    *   *Backend Action*: This updates the `settings/googleMapKey` document in Firestore.
+    *   *App Usage*: The mobile/web apps fetch this document to initialize the Google Maps SDK.
+
+### B. Firebase Cloud Messaging (FCM) / Notifications
+For push notifications to work (e.g., order updates), you need to configure FCM.
+1.  **Navigate to**: Admin Panel > Settings > Notification Settings.
+2.  **Sender ID**: Enter your Firebase Sender ID.
+3.  **Service JSON**: Upload the `firebase-service-account.json` file (generated from Firebase Console > Project Settings > Service Accounts).
+4.  **Save**: This securely stores the credentials to allow the server to send notifications.
+
+### C. Payment Gateway Keys (Stripe, PayPal, etc.)
+1.  **Navigate to**: Admin Panel > Settings > Payment Settings.
+2.  **Select Gateway**: Choose the payment method (e.g., Stripe, Razorpay).
+3.  **Input Keys**: Enter the Public/Publishable Key and Secret Key provided by your payment processor.
+4.  **Toggle**: Enable the payment method and optionally "Sandbox Mode" for testing.
+5.  **Save**: These keys are stored in Firestore for the app to process payments securely.
+
+### D. General Firebase Config
+The Admin Panel itself connects to Firebase using a configuration that is typically found in the code (often in `js/config.js` or `layouts/app.blade.php`), or sometimes dynamically loaded. If you need to change the project the Admin Panel connects to, you would update the Firebase initialization snippet with your new project's `apiKey`, `authDomain`, `projectId`, etc.
