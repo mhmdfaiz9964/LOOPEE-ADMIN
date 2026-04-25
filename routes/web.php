@@ -295,6 +295,7 @@ Route::prefix('settings')->group(function () {
     Route::middleware(['permission:scheduleOrderNotification,settings.app.scheduleOrderNotification'])->group(function () {
         Route::get('app/scheduleOrderNotification', [App\Http\Controllers\SettingsController::class, 'scheduleOrderNotification'])->name('settings.app.scheduleOrderNotification');
     });
+    Route::get('mobile/splashScreen', [App\Http\Controllers\SettingsController::class, 'splashScreen'])->name('settings.mobile.splashScreen');
 });
 Route::post('/sendnotification', [App\Http\Controllers\BookTableController::class, 'sendnotification'])->name('sendnotification');
 

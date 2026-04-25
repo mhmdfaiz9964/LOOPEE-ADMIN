@@ -203,4 +203,9 @@ class SettingsController extends Controller
     {
         return view('settings.app.cashbackOffer');
     }
+
+    public function splashScreen()
+    {
+        return view('settings.mobile.splash_screen');
+    }
 }

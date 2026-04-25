@@ -509,6 +509,7 @@
 
                     @if (in_array('global-setting', $role_has_permission))
                         <li><a href="{!! url('settings/app/globals') !!}">{{ trans('lang.app_setting_globals') }}</a></li>
+                        <li><a href="{!! route('settings.mobile.splashScreen') !!}">Splash Screen</a></li>
                     @endif
 
                     @if (in_array('currency', $role_has_permission))
